@@ -39,13 +39,21 @@ namespace CoreUtility
     }
     
     [InitializeOnLoad]
-    public class Persistent<T> : MonoBehaviour where T : Component
+    public class StaticPersistent<T> : MonoBehaviour where T : Component
     {
         protected static T Instance { get; private set; }
-        static Persistent() {
-            GameObject newGameObject = new GameObject(typeof(T).ToString());
-            Instance = newGameObject.AddComponent<T>();
-            DontDestroyOnLoad(Instance);
+        
+        static StaticPersistent() =>
+            Instance = PersistentFactory.CreateComponent<T>();
+    }
+
+    public static class PersistentFactory {
+        public static T CreateComponent<T>() where T: Component {
+            var newGameObject = new GameObject(typeof(T).Name);
+            var instance = newGameObject.AddComponent<T>();
+            Object.DontDestroyOnLoad(newGameObject);
+            
+            return instance;
         }
     }
 }

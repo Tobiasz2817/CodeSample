@@ -9,7 +9,7 @@ namespace CoreUtility.Extensions {
     public static class CollectionExtensions {
 
         #region Collection
-
+        
         public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> target) {
             foreach (var t in target) 
                 collection.Add(t);
@@ -55,9 +55,18 @@ namespace CoreUtility.Extensions {
         }
         
         // ReSharper disable Unity.PerformanceAnalysis
+        
         public static void ForEach<T>(this IEnumerable<T> array, Action<T> action) {
             foreach (var element in array) 
                 action?.Invoke(element);
+        }
+        
+        public static void ForEach<T>(this IEnumerable<T> array, Action<T, int> action) {
+            var index = 0;
+            foreach (var element in array) {
+                action?.Invoke(element, index);
+                index++;
+            }
         }
 
         #endregion

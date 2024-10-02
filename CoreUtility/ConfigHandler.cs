@@ -1,9 +1,66 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using CoreUtility.Extensions;
 using UnityEditor;
 using UnityEngine;
+using Object = System.Object;
 
 namespace CoreUtility {
+    static class ConfigInjector {
+        static string _name = "Config";
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        static void Inject() {
+            var assembliesName = new[] {
+                "Ability",
+                "InputFlow"
+            };
+            
+            var assemblies = new List<Assembly>();
+            foreach (var assemblyName in assembliesName) {
+                var assembly = Assembly.Load(assemblyName);
+                if (assembly == null) {
+#if UNITY_EDITOR
+                    Debug.LogWarning("Didn't find assemblyName: " + assembliesName + 
+                                     "/ if you think its good change in ConfigHandler available assemblies");
+#endif
+                    continue;
+                }
+                
+                assemblies.Add(assembly);
+            }
+            
+            var resources = Resources.LoadAll("");
+            var configs = new List<Object>();
+            foreach (var resource in resources) {
+                if(resource is not ScriptableObject config) 
+                    continue;
+                
+                if (!config.name.EndsWith(_name)) 
+                    continue;
+                
+                configs.Add(config);
+            }
+            
+            var assemblyTypes = assemblies.
+                SelectMany((a) => a.GetTypes());
+
+            foreach (var type in assemblyTypes) {
+                var fields = type.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).
+                    Where((field) => field.FieldType.Name.EndsWith(_name)).
+                    Where((field) => field.IsStatic).
+                    Where((field) => field.FieldType.Inherits(typeof(ScriptableObject)));
+                
+                foreach (var field in fields)
+                foreach (var config in configs.Where(config => config.GetType().Name == field.FieldType.Name)) 
+                    field.SetValue(type, config);
+            }
+        }
+    }
+
     public static class ConfigHandler {
         public static T CreateConfig<T>(string configKey, ref ConfigData configData) where T : ScriptableObject {
             EditorPrefs.DeleteKey(configKey);

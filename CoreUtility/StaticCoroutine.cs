@@ -1,8 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace CoreUtility {
-    public class StaticCoroutine : Persistent<StaticCoroutine> {
+    public class StaticCoroutine : StaticPersistent<StaticCoroutine> {
+        void Awake() =>
+            Application.quitting += StopAllCoroutines;
+        void OnDestroy() => 
+            StopAllCoroutines();
+        
         public static void RunCoroutine(IEnumerator enumerator) =>
             Instance.StartCoroutine(enumerator);
         

@@ -73,7 +73,7 @@ namespace CoreUtility.Extensions
         
         public static List<MemberInfo> GetMembers(this object injector, MemberTypes types = default, BindingFlags bindingFlags = default) {
             var members = new List<MemberInfo>();
-            var sourceType = injector.GetType();
+            var sourceType = injector as Type ?? injector.GetType();
 
             if (types.HasFlag(MemberTypes.Field)) 
                 members.AddRange(sourceType.GetFields(bindingFlags));
