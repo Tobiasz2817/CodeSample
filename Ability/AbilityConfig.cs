@@ -10,22 +10,16 @@ namespace Ability {
         [BoxGroup("General", ShowLabel = false)]
         [TitleGroup("General/Settings")]
         internal bool LoadInMemory;
-        
         [SerializeField]
-        [BoxGroup("ConfigGroup", ShowLabel = false)]
-        [TitleGroup("ConfigGroup/Config")]
-        internal ConfigData FileConfig;
-        
-        [Button]
-        [TitleGroup("ConfigGroup/Config")]
-        [ButtonGroup("ConfigGroup/Config/Buttons")]
-        void ChangePath() => AbilitiesCore.MoveConfig(ref FileConfig);
-        
-        [Button]
-        [TitleGroup("ConfigGroup/Config")]
-        [ButtonGroup("ConfigGroup/Config/Buttons")]
-        void ChangeName() => AbilitiesCore.ChangeConfigName(ref FileConfig);
-        
+        [BoxGroup("General", ShowLabel = false)]
+        [TitleGroup("General/Settings")]
+        internal string LabelKey = "Abilities";
+        // More Reading types -> Resources/Base
+        [SerializeField]
+        [BoxGroup("General", ShowLabel = false)]
+        [TitleGroup("General/Settings")]
+        internal int ExceptionAbilitiesCount = 4;
+
         [SerializeField]
         [BoxGroup("ImporterGroup", ShowLabel = false)]
         [TitleGroup("ImporterGroup/Importer")]
