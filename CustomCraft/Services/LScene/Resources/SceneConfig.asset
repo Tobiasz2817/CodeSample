@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38960564b92b47e08a47c01e1c3a8049, type: 3}
+  m_Name: SceneConfig
+  m_EditorClassIdentifier: 
+  CoreScene: 2
+  CoreSceneName: Menu
+  SceneTransitions:
+  - Transition: 2
+    FromScene: Boot
+    ToScene: Menu
+  - Transition: 2
+    FromScene: Boot
+    ToScene: LocalMenu
+  TransitionViews:
+  - {fileID: 6527225190975339825, guid: d152abfc291a9674db3450436c633854, type: 3}
+  - {fileID: 2797379789761210038, guid: bbc4675e19d7c944e878f99ebb0acf8a, type: 3}
